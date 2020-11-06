@@ -1,0 +1,30 @@
+#!/bin/python3
+from argparse import ArgumentParser
+from zlib import compress as zlib_compress
+from zlib import decompress as zlib_decompress
+
+parser = ArgumentParser("zlib", description="Compress/decompress raw zlib files.")
+parser.add_argument("--force", "-f", help="Force overwrite", action="store_true")
+parser.add_argument("--compress", "-c", help="Compress", action="store_true")
+parser.add_argument("--decompress", "-d",help="Decompress", action="store_true")
+parser.add_argument("infile", help="File to compress/decompress")
+parser.add_argument("outfile", help="Output file")
+
+args = parser.parse_args()
+
+and_conflict = args.compress and args.decompress
+no_operation = not (args.compress or args.decompress)
+if and_conflict:
+    raise Exception("Compress and decompress cannot be used together.")
+elif no_operation:
+    raise Exception("No operation specified.")
+
+infile = open(args.infile, "rb")
+outfile = open(args.outfile, "wb" if args.force else "xb")
+
+if args.compress:
+    outfile.write(zlib_compress(infile.read()))
+elif args.decompress:
+    outfile.write(zlib_decompress(infile.read()))
+infile.close()
+outfile.close()

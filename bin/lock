@@ -1,0 +1,21 @@
+#!/bin/sh
+pkill rofi # rofi grabs cursor
+i3lock --bar-indicator --refresh-rate=5 \
+--datecolor=ffffff \
+--timecolor=ffffff \
+--timestr="%H:%M" \
+--force-clock \
+--color=00000000 \
+--blur=10 \
+--bar-width=10 \
+--bar-step 200 \
+--bar-max-height=200 \
+--bar-orientation=horizontal \
+--bar-color 00000000 \
+--bar-periodic-step 10 \
+--bar-direction=2 \
+--bar-position=384 \
+--veriftext='' \
+--wrongtext='' \
+--noinputtext='' &
+sleep 0.1

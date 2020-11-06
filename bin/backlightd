@@ -1,0 +1,20 @@
+#!/bin/sh
+
+save(){
+	kill $!
+	xbacklight > ~/.backlight 2>> ~/.backlightd-error
+	exit 0
+}
+
+# Restore backlight
+[ -f ~/.backlight ] && xbacklight -time 0 -steps 1 -set "$(cat ~/.backlight)"
+
+# Save backlight value upon recieving SIGINT and SIGTERM signals
+trap save INT TERM
+
+# Do nothing and recieve signals
+while true
+do
+	pause &
+	wait $!
+done

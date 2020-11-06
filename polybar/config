@@ -1,0 +1,346 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+;background = ${xrdb:color0:#222}
+background = #c00e1019
+module-background = ${self.background}
+background-alt = ${xrdb:background-alt}
+;foreground = ${xrdb:color7:#222}
+foreground = ${xrdb:foreground}
+foreground-alt = ${xrdb:foreground-alt}
+primary = ${xrdb:color4}
+secondary = #e60053
+alert = #bd2c40
+cpu = ${xrdb:color1}
+memory = ${xrdb:color2}
+battery = ${xrdb:color3}
+network = ${xrdb:color4}
+temperature = ${xrdb:color5}
+date = ${xrdb:color6}
+
+[bar/mainbar]
+enable-ipc = true
+bottom = true
+width = 100%
+height = 24
+;offset-x = 0
+;offset-y = 1%
+radius = 0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 2
+line-color = #f00
+
+border-size = 0
+border-color = #00ffffff
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 1
+module-margin-right = 0
+
+font-0 = DejavuSansMono:size=8;2
+
+modules-left = menu-button i3 xwindow
+;modules-center = xwindow
+modules-right = mpd alsa backlight xkeyboard cpu memory battery wlan eth temperature date 
+
+tray-position = right
+tray-padding = 0
+;tray-background = #0063ff
+
+;wm-restack = bspwm
+;wm-restack = i3
+
+;override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/menu-button]
+type = custom/text
+content = ≡
+content-padding = 1
+content-background = ${colors.background-alt}
+click-left = rofi-drun 7 0 -24
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:50:...%
+format-background = ${colors.background-alt}
+format-padding = 1
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+background = ${colors.module-backgrond}
+
+;format-prefix = "" 
+format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-overline = ${colors.secondary}
+
+label-layout = %icon%
+label-layout-overline = ${colors.secondary}
+
+label-indicator-padding = 1
+label-indicator-margin = 0
+label-indicator-background = ${colors.secondary}
+label-indicator-overline = ${colors.secondary}
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-overline= ${colors.primary}
+label-focused-padding = 2
+
+label-occupied = %index%
+label-occupied-padding = 2
+
+label-urgent = %index%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty = %index%
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 1
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-overline= ${colors.primary}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-overline = ${self.label-focused-overline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/mpd]
+type = internal/mpd
+format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
+
+icon-prev = |<
+icon-stop = []
+icon-play = |>
+icon-pause = ||
+icon-next = >|
+
+label-song = %title%
+label-song-maxlen = 30
+label-song-ellipsis = true
+
+[module/backlight]
+type = internal/xbacklight
+format-prefix = "L:"
+format-prefix-foreground = ${colors.foreground-alt}
+label = %percentage%%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "C:"
+format-prefix-foreground = ${colors.foreground-alt}
+format-overline = ${colors.cpu}
+label = %percentage:2%%
+background = ${colors.background-alt}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "M:"
+format-prefix-foreground = ${colors.foreground-alt}
+format-overline = ${colors.memory}
+label = %percentage_used%%
+
+[module/wlan]
+type = internal/network
+interface = wlp3s0
+interval = 3.0
+
+format-connected = <label-connected>
+format-connected-overline = ${colors.network}
+format-connected-prefix = "W:"
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %essid%
+
+;format-disconnected =
+format-disconnected = <label-disconnected>
+format-disconnected-prefix = "W:"
+format-disconnected-prefix-foreground = ${colors.foreground-alt}
+;format-disconnected-overline = ${self.format-connected-overline}
+label-disconnected = ?
+label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = "W:"
+ramp-signal-1 = "W:"
+ramp-signal-2 = "W:"
+ramp-signal-3 = "W:"
+ramp-signal-4 = "W:"
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = enp0s25
+interval = 3.0
+
+format-connected-overline = ${colors.network}
+format-connected-prefix = "E:"
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %ifname%
+format-disconnected = <label-disconnected>
+format-disconnected-prefix = "E:"
+format-disconnected-prefix-foreground = ${colors.foreground-alt}
+label-disconnected = ?
+label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 1
+
+date =
+date-alt = "%Y-%m-%d %H:%M:%S"
+
+time = %H:%M:%S
+time-alt = 
+
+;format-prefix = D:
+format-prefix-foreground = ${colors.foreground-alt}
+format-overline = ${colors.date}
+
+label = %date%%time%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume>
+label-volume = PA:%percentage%%
+label-volume-foreground = ${root.foreground}
+
+label-muted = PA:muted
+label-muted-foreground = #666
+
+
+[module/alsa]
+type = internal/alsa
+
+format-volume-prefix = "A:"
+format-volume = <label-volume>
+format-volume-foreground = ${colors.foreground-alt}
+label-volume = %percentage%%
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = "A:"
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = ###
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 98
+time-format = %H:%M
+label-charging = %percentage%% (%time%)
+format-charging-prefix = "B+"
+format-charging-prefix-foreground = ${colors.foreground-alt}
+format-charging = <label-charging>
+format-charging-overline = ${xrdb:color3}
+
+label-discharging = %percentage%% (%time%)
+format-discharging-prefix = "B-"
+format-discharging-prefix-foreground = ${colors.foreground-alt}
+format-discharging = <label-discharging>
+format-discharging-overline = ${self.format-charging-overline}
+
+format-full-prefix = "B:"
+format-full-prefix-foreground = ${colors.foreground-alt}
+format-full-overline = ${self.format-charging-overline}
+
+
+
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <label>
+format-overline = ${colors.temperature}
+format-warn = <label-warn>
+format-warn-overline = ${colors.temperature}
+
+label = %temperature-c%
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.secondary}
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini

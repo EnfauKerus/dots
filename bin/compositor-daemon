@@ -1,0 +1,20 @@
+#!/bin/sh
+if pgrep picom
+then
+	echo "Picom is already running."
+	exit 1
+fi
+
+term(){
+	kill $!
+	exit 0
+}
+
+
+trap term INT TERM
+
+while true
+do
+	picom --experimental-backends &
+	wait $!
+done

@@ -1,0 +1,1 @@
+rofi -icon-theme 'Papirus' -show-icons -modi "drun,run,window,ssh" -ssh-client mosh -no-parse-known-hosts -sidebar-mode -show drun -location $1 -xoffset $2 -yoffset $3
