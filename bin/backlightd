@@ -1,8 +1,8 @@
 #!/bin/sh
-
+BACKLIGHT_DRIVER="intel_backlight"
 save(){
 	kill $!
-	xbacklight > ~/.backlight 2>> ~/.backlightd-error
+	echo $(( $(cat /sys/class/backlight/${BACKLIGHT_DRIVER}/brightness) * 100 / $(cat /sys/class/backlight/${BACKLIGHT_DRIVER}/max_brightness))) > ~/.backlight 2>> ~/.backlightd-error
 	exit 0
 }
 

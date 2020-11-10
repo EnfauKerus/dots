@@ -127,7 +127,13 @@ mode "resize" {
         bindsym Down resize grow height 5 px or 1 ppt
         bindsym Up resize shrink height 5 px or 1 ppt
         bindsym Right resize grow width 5 px or 1 ppt
-
+	bindsym $mod+Down gaps vertical current minus 5
+	bindsym $mod+Up gaps vertical current plus 5
+	bindsym $mod+Left gaps horizontal current minus 5
+	bindsym $mod+Right gaps horizontal current plus 5
+	bindsym $mod+Shift+Down gaps outer current minus 5
+	bindsym $mod+Shift+Up gaps outer current plus 5
+	bindsym $mod+g gaps outer current set 0
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
