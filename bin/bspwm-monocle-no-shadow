@@ -1,0 +1,31 @@
+#!/bin/sh
+bspc subscribe desktop_layout node_add | while read -r event args
+do
+	case "$event" in
+		"desktop_layout")
+			echo "$args" | (
+			read -r monitor_id desktop_id layout
+			window=$(bspc query -N -d "$desktop_id" -n .window | wc -l )
+			bspc query -N -d "$desktop_id" -n .window | while read node
+			do
+				if [ "$layout" = "monocle" ]
+				then
+					xprop -id "$node" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
+				else
+					xprop -id "$node" -remove _PICOM_NO_SHADOW
+				fi
+			done
+			)
+			;;
+		"node_add")
+			echo "$args" | (
+			read -r monitor_id desktop_id ip_id node_id
+			window_count=$(bspc query -N -d "$desktop_id" -n .window | wc -l)
+			if [ "$window_count" -eq 1 ]
+			then
+				xprop -id "$node_id" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
+			fi
+			)
+			;;
+	esac
+done
