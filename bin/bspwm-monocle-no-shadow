@@ -1,17 +1,17 @@
 #!/bin/sh
-bspc subscribe desktop_layout node_add | while read -r event args
+bspc subscribe desktop_layout node_add node_state node_transfer | while read -r event args
 do
 	case "$event" in
 		"desktop_layout")
 			echo "$args" | {
 			read -r monitor_id desktop_id layout
-			bspc query -N -d "$desktop_id" -n .window | while read -r node
+			bspc query -N -d "$desktop_id" -n .window.tiled | while read -r node_id
 			do
 				if [ "$layout" = "monocle" ]
 				then
-					xprop -id "$node" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
+					xprop -id "$node_id" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
 				else
-					xprop -id "$node" -remove _PICOM_NO_SHADOW
+					xprop -id "$node_id" -remove _PICOM_NO_SHADOW
 				fi
 			done
 			}
@@ -19,10 +19,38 @@ do
 		"node_add")
 			echo "$args" | {
 			read -r monitor_id desktop_id ip_id node_id
+			bspc query -T -d $desktop_id | grep monocle
+			is_monocle="$?"
 			window_count=$(bspc query -N -d "$desktop_id" -n .window | wc -l)
-			if [ "$window_count" -eq 1 ]
+			if [ $is_monocle -eq 0 ]
 			then
 				xprop -id "$node_id" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
+			fi
+			}
+			;;
+		"node_state")
+			echo "$args" | {
+			read -r monitor_id desktop_id node_id mode state
+			if [ "$mode" = "floating" ]
+			then
+				if [ "$state" = "off" ]
+				then
+					xprop -id "$node_id" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
+				else
+					xprop -id "$node_id" -remove _PICOM_NO_SHADOW
+				fi
+			fi
+			}
+			;;
+		"node_transfer")
+			echo "$args" | {
+			read -r src_monitor_id src_desktop_id src_node_id dst_monitor_id dst_desktop_id dst_node_id
+			bspc query -T -d $dst_desktop_id | grep monocle
+			is_monocle="$?"
+			window_count=$(bspc query -N -d "$dst_desktop_id" -n .window | wc -l)
+			if [ $is_monocle -eq 0 ]
+			then
+				xprop -id "$src_node_id" -f _PICOM_NO_SHADOW 32c -set _PICOM_NO_SHADOW 1
 			fi
 			}
 			;;
