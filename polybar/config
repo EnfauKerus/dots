@@ -36,43 +36,43 @@ date = ${xrdb:color6}
 
 [bar/mainbar]
 enable-ipc = true
-bottom = true
+bottom = false
 width = 100%
 height = 24
-;offset-x = 0
-;offset-y = 1%
-radius = 0
-fixed-center = false
+;offset-x = 0.5%
+;offset-y = 0.5%
+;radius = 5
+fixed-center = true
 
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-line-size = 2
+line-size = 0
 line-color = #f00
 
 border-size = 0
 border-color = #00ffffff
 
-padding-left = 0
-padding-right = 0
+padding-left = 1
+padding-right = 1
 
 module-margin-left = 1
 module-margin-right = 0
 
-font-0 = DejavuSansMono:size=8;2
+font-0 = Noto Sans Mono CJK TC:size=8;2
 
-modules-left = menu-button i3 xwindow
+modules-left = bspwm i3 xwindow
 ;modules-center = xwindow
-modules-right = mpd alsa backlight xkeyboard cpu memory battery wlan eth temperature date 
+modules-right = xkeyboard mpd alsa backlight cpu memory battery wlan eth temperature date 
 
 tray-position = right
 tray-padding = 0
-;tray-background = #0063ff
+; tray-background = #0063ff
 
-;wm-restack = bspwm
+wm-restack = bspwm
 ;wm-restack = i3
 
-;override-redirect = true
+; override-redirect = true
 
 ;scroll-up = bspwm-desknext
 ;scroll-down = bspwm-deskprev
@@ -90,6 +90,14 @@ content-padding = 1
 content-background = ${colors.background-alt}
 click-left = rofi-drun 7 0 -24
 
+[module/tray-button]
+type = custom/text
+content = ^
+content-padding = 0
+content-background = ${colors.background-alt}
+click-left = show-tray
+click-right = pkill trayer
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:50:...%
@@ -103,34 +111,37 @@ background = ${colors.module-backgrond}
 
 ;format-prefix = "" 
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-overline = ${colors.secondary}
+format-prefix-underline = ${colors.secondary}
 
 label-layout = %icon%
-label-layout-overline = ${colors.secondary}
+label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 1
 label-indicator-margin = 0
 label-indicator-background = ${colors.secondary}
-label-indicator-overline = ${colors.secondary}
+label-indicator-underline = ${colors.secondary}
 
 [module/bspwm]
 type = internal/bspwm
 
-label-focused = %index%
+; label-focused = %name%
+label-focused = *
 label-focused-background = ${colors.background-alt}
-label-focused-overline= ${colors.primary}
-label-focused-padding = 2
+label-focused-underline= ${colors.primary}
+label-focused-padding = 0
 
-label-occupied = %index%
-label-occupied-padding = 2
+;label-occupied = %name%
+label-occupied = -
+label-occupied-padding = 0
 
-label-urgent = %index%!
+; label-urgent = %name%!
+label-urgent = !
 label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
+label-urgent-padding = 0
 
-label-empty = %index%
+label-empty = _
 label-empty-foreground = ${colors.foreground-alt}
-label-empty-padding = 2
+label-empty-padding = 0
 
 ; Separator in between workspaces
 ; label-separator = |
@@ -152,7 +163,7 @@ label-mode-background = ${colors.primary}
 ; focused = Active workspace on focused monitor
 label-focused = %index%
 label-focused-background = ${colors.background-alt}
-label-focused-overline= ${colors.primary}
+label-focused-underline= ${colors.primary}
 label-focused-padding = 1
 
 ; unfocused = Inactive workspace on any monitor
@@ -162,7 +173,7 @@ label-unfocused-padding = 1
 ; visible = Active workspace on unfocused monitor
 label-visible = %index%
 label-visible-background = ${self.label-focused-background}
-label-visible-overline = ${self.label-focused-overline}
+label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
@@ -184,8 +195,8 @@ icon-play = |>
 icon-pause = ||
 icon-next = >|
 
-label-song = %title%
-label-song-maxlen = 30
+label-song = %title% by %artist%
+label-song-maxlen = 50
 label-song-ellipsis = true
 
 [module/backlight]
@@ -199,7 +210,7 @@ type = internal/cpu
 interval = 2
 format-prefix = "C:"
 format-prefix-foreground = ${colors.foreground-alt}
-format-overline = ${colors.cpu}
+format-underline = ${colors.cpu}
 label = %percentage:2%%
 background = ${colors.background-alt}
 
@@ -208,7 +219,7 @@ type = internal/memory
 interval = 2
 format-prefix = "M:"
 format-prefix-foreground = ${colors.foreground-alt}
-format-overline = ${colors.memory}
+format-underline = ${colors.memory}
 label = %percentage_used%%
 
 [module/wlan]
@@ -217,38 +228,37 @@ interface = wlp3s0
 interval = 3.0
 
 format-connected = <label-connected>
-format-connected-overline = ${colors.network}
+format-connected-underline = ${colors.network}
 format-connected-prefix = "W:"
 format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %essid%
+label-connected = up
+;label-connected = %essid%
 
 ;format-disconnected =
 format-disconnected = <label-disconnected>
 format-disconnected-prefix = "W:"
 format-disconnected-prefix-foreground = ${colors.foreground-alt}
-;format-disconnected-overline = ${self.format-connected-overline}
+;format-disconnected-underline = ${self.format-connected-underline}
 label-disconnected = ?
 label-disconnected-foreground = ${colors.foreground-alt}
 
-ramp-signal-0 = "W:"
-ramp-signal-1 = "W:"
-ramp-signal-2 = "W:"
-ramp-signal-3 = "W:"
-ramp-signal-4 = "W:"
-ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
 interface = enp0s25
 interval = 3.0
 
-format-connected-overline = ${colors.network}
+format-connected-underline = ${colors.network}
 format-connected-prefix = "E:"
 format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %ifname%
+label-connected = up
+;label-connected = %ifname%
+;label-connected = %local_ip%
+;format-disconnected =
 format-disconnected = <label-disconnected>
 format-disconnected-prefix = "E:"
 format-disconnected-prefix-foreground = ${colors.foreground-alt}
+;format-disconnected-underline = ${self.format-connected-underline}
 label-disconnected = ?
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -264,7 +274,7 @@ time-alt =
 
 ;format-prefix = D:
 format-prefix-foreground = ${colors.foreground-alt}
-format-overline = ${colors.date}
+format-underline = ${colors.date}
 
 label = %date%%time%
 
@@ -302,17 +312,17 @@ label-charging = %percentage%% (%time%)
 format-charging-prefix = "B+"
 format-charging-prefix-foreground = ${colors.foreground-alt}
 format-charging = <label-charging>
-format-charging-overline = ${xrdb:color3}
+format-charging-underline = ${xrdb:color3}
 
 label-discharging = %percentage%% (%time%)
 format-discharging-prefix = "B-"
 format-discharging-prefix-foreground = ${colors.foreground-alt}
 format-discharging = <label-discharging>
-format-discharging-overline = ${self.format-charging-overline}
+format-discharging-underline = ${self.format-charging-underline}
 
 format-full-prefix = "B:"
 format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-overline = ${self.format-charging-overline}
+format-full-underline = ${self.format-charging-underline}
 
 
 
@@ -323,13 +333,60 @@ thermal-zone = 0
 warn-temperature = 60
 
 format = <label>
-format-overline = ${colors.temperature}
+format-underline = ${colors.temperature}
 format-warn = <label-warn>
-format-warn-overline = ${colors.temperature}
+format-warn-underline = ${colors.temperature}
 
 label = %temperature-c%
 label-warn = %temperature-c%
 label-warn-foreground = ${colors.secondary}
+
+ramp-0 = T!
+ramp-1 = T:
+ramp-2 = T:
+ramp-foreground = ${colors.foreground-alt}
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = false
+
+format-spacing = 1
+
+label-open = [P]
+label-open-foreground = ${colors.secondary}
+label-close = [X]
+label-close-foreground = ${colors.secondary}
+;label-separator = |
+;label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = [RST]
+menu-0-0-exec = menu-open-1
+menu-0-1 = [OFF]
+menu-0-1-exec = menu-open-2
+menu-0-2 = [ZZZ]
+menu-0-2-exec = menu-open-3
+
+menu-1-0 = [ X ]
+menu-1-0-exec = menu-close
+menu-1-1 = [RST]
+menu-1-1-exec = loginctl reboot
+menu-1-2 = [ X ]
+menu-1-2-exec = menu-close
+
+menu-2-0 = [OFF]
+menu-2-0-exec = loginctl poweroff
+menu-2-1 = [ X ]
+menu-2-1-exec = menu-close
+menu-2-2 = [ X ]
+menu-2-2-exec = menu-close
+
+menu-3-0 = [ X ]
+menu-3-0-exec = menu-close
+menu-3-1 = [ZZZ]
+menu-3-1-exec = loginctl suspend
+menu-3-2 = [ X ]
+menu-3-2-exec = menu-close
 
 [settings]
 screenchange-reload = true
@@ -340,7 +397,7 @@ screenchange-reload = true
 ;pseudo-transparency = false
 
 [global/wm]
-margin-top = 5
-margin-bottom = 5
+margin-top = 0
+margin-bottom = 0
 
 ; vim:ft=dosini
