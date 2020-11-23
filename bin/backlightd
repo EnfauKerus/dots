@@ -6,6 +6,8 @@ save(){
 	exit 0
 }
 
+pgrep backlightd && exit 1
+
 # Restore backlight
 [ -f ~/.backlight ] && xbacklight -time 0 -steps 1 -set "$(cat ~/.backlight)"
 
